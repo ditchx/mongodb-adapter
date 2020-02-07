@@ -8,7 +8,7 @@ MongoDB Adapter is the [Mongo DB](https://www.mongodb.com) adapter for [Casbin](
 
 ## Installation
 
-    go get github.com/ditchx/mongodb-adapter
+    go get github.com/ditchx/mongodb-adapter/v2
 
 ## Simple Example
 
@@ -16,8 +16,8 @@ MongoDB Adapter is the [Mongo DB](https://www.mongodb.com) adapter for [Casbin](
 package main
 
 import (
-	"github.com/casbin/casbin"
-	"github.com/ditchx/mongodb-adapter"
+	"github.com/casbin/casbin/v2"
+	"github.com/ditchx/mongodb-adapter/v2"
 )
 
 func main() {
@@ -36,7 +36,11 @@ func main() {
 	// client, _ := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
 	// a := mongodbadapter.NewAdapterFromClient(client, mongodbadapter.DBName("abc") )
 
-	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	if err != nil {
+		panic(err)
+	}
+
 
 	// Load the policy from DB.
 	e.LoadPolicy()
