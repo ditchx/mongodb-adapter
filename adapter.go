@@ -20,8 +20,8 @@ import (
 	"log"
 	"runtime"
 
-	"github.com/casbin/casbin/model"
-	"github.com/casbin/casbin/persist"
+	"github.com/casbin/casbin/v2/model"
+	"github.com/casbin/casbin/v2/persist"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

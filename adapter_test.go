@@ -19,9 +19,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/casbin/casbin"
-	"github.com/casbin/casbin/persist"
-	"github.com/casbin/casbin/util"
+	"github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v2/persist"
+	"github.com/casbin/casbin/v2/util"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -33,7 +33,7 @@ var testClient *mongo.Client
 
 func getDbURL() string {
 	if testDbURL == "" {
-		testDbURL = "mongodb://127.0.0.1:27017"
+		testDbURL = "mongodb://172.17.0.2:27017"
 	}
 	return testDbURL
 }
@@ -71,13 +71,16 @@ func testGetPolicy(t *testing.T, e *casbin.Enforcer, res [][]string) {
 func initPolicy(t *testing.T) {
 	// Because the DB is empty at first,
 	// so we need to load the policy from the file adapter (.CSV) first.
-	e := casbin.NewEnforcer("examples/rbac_model.conf", "examples/rbac_policy.csv")
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", "examples/rbac_policy.csv")
+	if err != nil {
+		panic(err)
+	}
 
 	a := newTestAdapter()
 	// This is a trick to save the current policy to the DB.
 	// We can't call e.SavePolicy() because the adapter in the enforcer is still the file adapter.
 	// The current policy means the policy in the Casbin enforcer (aka in memory).
-	err := a.SavePolicy(e.GetModel())
+	err = a.SavePolicy(e.GetModel())
 	if err != nil {
 		panic(err)
 	}
@@ -107,7 +110,11 @@ func TestAdapter(t *testing.T) {
 	a := newTestAdapterFromClient()
 	defer testClient.Disconnect(context.Background())
 
-	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	if err != nil {
+		panic(err)
+	}
+
 	testGetPolicy(t, e, [][]string{{"alice", "data1", "read"}, {"bob", "data2", "write"}, {"data2_admin", "data2", "read"}, {"data2_admin", "data2", "write"}})
 	// AutoSave is enabled by default.
 	// Now we disable it.
@@ -168,7 +175,10 @@ func TestAdapter(t *testing.T) {
 }
 func TestDeleteFilteredAdapter(t *testing.T) {
 	a := newTestFilteredAdapter()
-	e := casbin.NewEnforcer("examples/rbac_tenant_service.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_tenant_service.conf", a)
+	if err != nil {
+		panic(err)
+	}
 
 	e.AddPolicy("domain1", "alice", "data3", "read", "accept", "service1")
 	e.AddPolicy("domain1", "alice", "data3", "write", "accept", "service2")
@@ -199,7 +209,10 @@ func TestFilteredAdapter(t *testing.T) {
 	// Create an adapter and an enforcer.
 	// NewEnforcer() will load the policy automatically.
 	a := newTestAdapter()
-	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	if err != nil {
+		panic(err)
+	}
 
 	// Load filtered policies from the database.
 	e.AddPolicy("alice", "data1", "write")
