@@ -33,7 +33,7 @@ var testClient *mongo.Client
 
 func getDbURL() string {
 	if testDbURL == "" {
-		testDbURL = "mongodb://172.17.0.2:27017"
+		testDbURL = "mongodb://127.0.0.1:27017"
 	}
 	return testDbURL
 }
