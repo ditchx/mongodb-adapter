@@ -1,6 +1,9 @@
+***Archived and no longer maintained. The original [Casbin MongoDB Adapter](https://github.com/casbin/mongodb-adapter) is now using the official MongoDB Go Driver.***
+ 
+
 MongoDB Adapter [![Build Status](https://travis-ci.org/ditchx/mongodb-adapter.svg?branch=master)](https://travis-ci.org/ditchx/mongodb-adapter) [![Coverage Status](https://coveralls.io/repos/github/ditchx/mongodb-adapter/badge.svg?branch=master)](https://coveralls.io/github/ditchx/mongodb-adapter?branch=master) [![Godoc](https://godoc.org/github.com/ditchx/mongodb-adapter?status.svg)](https://godoc.org/github.com/ditchx/mongodb-adapter)
 ====
-
+ 
 This fork uses the official [MongoDB Go Driver](https://github.com/mongodb/mongo-go-driver) instead of [MGO](https://github.com/globalsign/mgo).
 
 MongoDB Adapter is the [Mongo DB](https://www.mongodb.com) adapter for [Casbin](https://github.com/casbin/casbin). With this library, Casbin can load policy from MongoDB or save policy to it.
